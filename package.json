@@ -1,0 +1,15 @@
+{
+  "name": "@scola/codec",
+  "version": "0.0.0",
+  "description": "Codecs",
+  "repository": "github:scola84/codec",
+  "author": "M.C. van den Boogaart <scola@kvdb.name>",
+  "license": "MIT",
+  "main": "./index.js",
+  "jsnext:main": "./index.js",
+  "dependencies": {
+    "@scola/worker": "^1.0.0",
+    "msgpack-lite": "^0.1.26",
+    "qs": "^6.5.1"
+  }
+}
