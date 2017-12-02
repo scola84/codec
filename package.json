@@ -1,6 +1,6 @@
 {
   "name": "@scola/codec",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Codecs",
   "repository": "github:scola84/codec",
   "author": "M.C. van den Boogaart <scola@kvdb.name>",
