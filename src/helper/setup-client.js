@@ -1,7 +1,7 @@
-import chunked from '../chunked/codec';
-import json from '../json/codec';
-import msgpack from '../msgpack/codec';
-import urlencoded from '../urlencoded/codec';
+import chunked from '../chunked';
+import json from '../json';
+import msgpack from '../msgpack';
+import urlencoded from '../urlencoded';
 
 export default function setupClient(connector) {
   connector

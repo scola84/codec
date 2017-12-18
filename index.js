@@ -1,7 +1,7 @@
-import chunked from './src/chunked/codec';
-import json from './src/json/codec';
-import msgpack from './src/msgpack/codec';
-import urlencoded from './src/urlencoded/codec';
+import chunked from './src/chunked';
+import json from './src/json';
+import msgpack from './src/msgpack';
+import urlencoded from './src/urlencoded';
 import setupClient from './src/helper/setup-client';
 import setupServer from './src/helper/setup-server';
 
