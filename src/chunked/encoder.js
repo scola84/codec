@@ -3,12 +3,14 @@ import { Buffer } from 'buffer/';
 const CRLF = Buffer.from('\r\n');
 
 export default class ChunkedEncoder extends Worker {
-  constructor(methods) {
-    super(methods);
-    this._chunkLength = 1024 * 64;
+  constructor(options = {}) {
+    super(options);
+
+    this._chunkLength = null;
+    this.setChunkLength(options.chunkLength);
   }
 
-  setChunkLength(chunkLength) {
+  setChunkLength(chunkLength = 64 * 1024) {
     this._chunkLength = chunkLength;
     return this;
   }
