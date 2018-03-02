@@ -6,6 +6,13 @@ import json from './src/json';
 import msgpack from './src/msgpack';
 import urlencoded from './src/urlencoded';
 
+export const codec = [
+  json,
+  formdata,
+  msgpack,
+  urlencoded
+];
+
 export {
   setupClient,
   setupServer
