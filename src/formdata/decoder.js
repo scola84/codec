@@ -1,6 +1,7 @@
 import { Worker } from '@scola/worker';
 import Busboy from 'busboy';
 import { createWriteStream } from 'fs';
+import { ensureDirSync } from 'fs-extra';
 import defaults from 'lodash-es/defaults';
 import shortid from 'shortid';
 
@@ -17,6 +18,7 @@ export default class FormDataDecoder extends Worker {
       basePath: '/tmp/'
     });
 
+    ensureDirSync(this._config.basePath);
     return this;
   }
 
