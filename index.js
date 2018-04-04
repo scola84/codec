@@ -8,7 +8,6 @@ import urlencoded from './src/urlencoded';
 
 export const codec = [
   json,
-  formdata,
   msgpack,
   urlencoded
 ];
