@@ -15,6 +15,10 @@ export default class MsgPackDecoder extends Worker {
     }
   }
 
+  decide(message, data) {
+    return data === null ? null : true;
+  }
+
   _decode(message, data, callback) {
     data = decode((message.parser.msgpack || '') + data);
     message.parser.msgpack = null;

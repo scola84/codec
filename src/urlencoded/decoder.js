@@ -15,6 +15,10 @@ export default class UrlencodedDecoder extends Worker {
     }
   }
 
+  decide(message, data) {
+    return data === null ? null : true;
+  }
+
   _decode(message, data, callback) {
     data = qs.parse((message.parser.urlencoded || '') + data);
     message.parser.urlencoded = null;

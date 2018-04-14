@@ -14,6 +14,10 @@ export default class JsonDecoder extends Worker {
     }
   }
 
+  decide(message, data) {
+    return data === null ? null : true;
+  }
+
   _decode(message, data, callback) {
     data = JSON.parse((message.parser.json || '') + data);
     message.parser.json = null;

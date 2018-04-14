@@ -42,7 +42,9 @@ export default class ChunkedDecoder extends Worker {
     message.parser.begin = 0;
   }
 
-  decide(message) {
-    return message.state.body !== true && message.state.headers === true;
+  decide(message, data) {
+    return data !== null &&
+      message.state.body !== true &&
+      message.state.headers === true;
   }
 }
