@@ -1,6 +1,7 @@
 import Decoder from './decoder';
 import Encoder from './encoder';
-import type from './type';
+
+const type = 'application/x-www-form-urlencoded';
 
 export default {
   Decoder,

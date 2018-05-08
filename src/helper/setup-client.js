@@ -26,6 +26,6 @@ export default function setupClient(connector, config = {}) {
     .setStrict(false)
     .manage(json.type, new json.Encoder(config.json))
     .manage(msgpack.type, new msgpack.Encoder(config.msgpack))
-    .manage(formdata.type, new formdata.Decoder(config.formdata))
+    .manage(formdata.type, new formdata.Encoder(config.formdata))
     .manage(urlencoded.type, new urlencoded.Encoder(config.urlencoded));
 }

@@ -7,6 +7,7 @@ import msgpack from './src/msgpack';
 import urlencoded from './src/urlencoded';
 
 export const codec = [
+  formdata,
   json,
   msgpack,
   urlencoded
