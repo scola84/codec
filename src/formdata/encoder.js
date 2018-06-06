@@ -27,10 +27,16 @@ export default class FormDataEncoder extends Worker {
       value = isArray ? value : [value];
 
       for (let j = 0; j < value.length; j += 1) {
-        form.append(name, value[j]);
+        form.append(name, this._isEmpty(value[j]) ? '' : value[j]);
       }
     }
 
     this.pass(message, form, callback);
+  }
+
+  _isEmpty(value) {
+    return typeof value === 'undefined' ||
+      value === null ||
+      value === '';
   }
 }
