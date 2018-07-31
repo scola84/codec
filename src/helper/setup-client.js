@@ -5,7 +5,7 @@ import json from '../json';
 import msgpack from '../msgpack';
 import urlencoded from '../urlencoded';
 
-export default function setupClient(connector, config = {}) {
+export default function setupClient([connector, ...workers], config = {}) {
   connector
     .find((w) => w.constructor.name === 'TransferEncodingDecoder')
     .manage(chunked.encoding, new chunked.Decoder());
@@ -31,4 +31,6 @@ export default function setupClient(connector, config = {}) {
     .manage(msgpack.type, new msgpack.Encoder(config.msgpack))
     .manage(formdata.type, new formdata.Encoder(config.formdata))
     .manage(urlencoded.type, new urlencoded.Encoder(config.urlencoded));
+
+  return [connector, ...workers];
 }
