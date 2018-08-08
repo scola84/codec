@@ -1,4 +1,5 @@
 import { Worker } from '@scola/worker';
+import { Buffer } from 'buffer/';
 import qs from 'qs';
 
 export default class UrlencodedEncoder extends Worker {
@@ -12,7 +13,7 @@ export default class UrlencodedEncoder extends Worker {
 
   _encode(message, data, callback) {
     data = qs.stringify(data);
-    message.body.length = data.length;
+    message.body.length = Buffer.byteLength(data);
 
     this.pass(message, data, callback);
   }

@@ -1,4 +1,5 @@
 import { Worker } from '@scola/worker';
+import { Buffer } from 'buffer/';
 import parser from 'parse5';
 
 export default class HtmlEncoder extends Worker {
@@ -12,7 +13,7 @@ export default class HtmlEncoder extends Worker {
 
   _encode(message, data, callback) {
     data = parser.serialize(data);
-    message.body.length = data.length;
+    message.body.length = Buffer.byteLength(data);
 
     this.pass(message, data, callback);
   }

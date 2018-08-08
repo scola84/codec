@@ -1,4 +1,5 @@
 import { Worker } from '@scola/worker';
+import { Buffer } from 'buffer/';
 import { encode } from 'msgpack-lite';
 
 export default class MsgpackEncoder extends Worker {
@@ -12,7 +13,7 @@ export default class MsgpackEncoder extends Worker {
 
   _encode(message, data, callback) {
     data = encode(data);
-    message.body.length = data.length;
+    message.body.length = Buffer.byteLength(data);
 
     this.pass(message, data, callback);
   }
