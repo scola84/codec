@@ -1,9 +1,9 @@
 import Decoder from './decoder';
 import Encoder from './encoder';
-import type from './type';
+import encoding from './encoding';
 
 export default {
   Decoder,
   Encoder,
-  type
+  encoding
 };
