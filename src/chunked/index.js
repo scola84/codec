@@ -1,10 +1,9 @@
 import Decoder from './decoder';
 import Encoder from './encoder';
-
-const encoding = 'chunked';
+import type from './type';
 
 export default {
   Decoder,
   Encoder,
-  encoding
+  type
 };

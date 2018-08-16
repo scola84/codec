@@ -1,5 +1,6 @@
 import { Worker } from '@scola/worker';
 import { Buffer } from 'buffer/';
+import type from './type';
 
 export default class JsonEncoder extends Worker {
   act(message, data, callback) {
@@ -10,9 +11,16 @@ export default class JsonEncoder extends Worker {
     }
   }
 
+  decide(message) {
+    return message.state.body !== true &&
+      message.body.dataType !== type;
+  }
+
   _encode(message, data, callback) {
     data = JSON.stringify(data);
+
     message.body.length = Buffer.byteLength(data);
+    message.state.body = true;
 
     this.pass(message, data, callback);
   }

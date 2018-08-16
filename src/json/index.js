@@ -1,7 +1,6 @@
 import Decoder from './decoder';
 import Encoder from './encoder';
-
-const type = 'application/json';
+import type from './type';
 
 export default {
   Decoder,

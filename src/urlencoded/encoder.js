@@ -1,6 +1,7 @@
 import { Worker } from '@scola/worker';
 import { Buffer } from 'buffer/';
 import qs from 'qs';
+import type from './type';
 
 export default class UrlencodedEncoder extends Worker {
   act(message, data, callback) {
@@ -11,9 +12,16 @@ export default class UrlencodedEncoder extends Worker {
     }
   }
 
+  decide(message) {
+    return message.state.body !== true &&
+      message.body.dataType !== type;
+  }
+
   _encode(message, data, callback) {
     data = qs.stringify(data);
+
     message.body.length = Buffer.byteLength(data);
+    message.state.body = true;
 
     this.pass(message, data, callback);
   }

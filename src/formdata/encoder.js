@@ -1,5 +1,6 @@
 import { Worker } from '@scola/worker';
 import { FormData } from 'file-api';
+import type from './type';
 
 export default class FormDataEncoder extends Worker {
   act(message, data, callback) {
@@ -8,6 +9,11 @@ export default class FormDataEncoder extends Worker {
     } catch (error) {
       throw new Error('500 ' + error.message);
     }
+  }
+
+  decide(message) {
+    return message.state.body !== true &&
+      message.body.dataType !== type;
   }
 
   _encode(message, data, callback) {
@@ -30,6 +36,8 @@ export default class FormDataEncoder extends Worker {
         form.append(name, this._isEmpty(value[j]) ? '' : value[j]);
       }
     }
+
+    message.state.body = true;
 
     this.pass(message, form, callback);
   }

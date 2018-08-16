@@ -1,7 +1,6 @@
 import Decoder from './decoder';
 import Encoder from './encoder';
-
-const type = 'text/html';
+import type from './type';
 
 export default {
   Decoder,
