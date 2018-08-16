@@ -8,15 +8,15 @@
   "main": "./index.js",
   "jsnext:main": "./index.js",
   "dependencies": {
-    "@scola/worker": "^2.6.2",
+    "@scola/worker": "^2.6.4",
     "buffer": "^5.2.0",
     "busboy": "^0.2.14",
     "file-api": "^0.10.4",
     "fs-extra": "^7.0.0",
     "lodash-es": "^4.17.10",
     "msgpack-lite": "^0.1.26",
-    "parse5": "^5.0.0",
+    "parse5": "^5.1.0",
     "qs": "^6.5.2",
-    "shortid": "^2.2.12"
+    "shortid": "^2.2.13"
   }
 }
