@@ -15,16 +15,13 @@ export default class ChunkedDecoder extends Worker {
 
   act(message, data, callback) {
     let begin = message.parser.begin;
-    let diff = 0;
     let i = begin;
 
     for (; i < data.length; i += 1) {
-      diff = i - 1 - begin;
-
-      if (data[i] === 10) {
+      if (data[i] === 13) {
         if (message.parser.length === null) {
           [begin, i] = this._parseLength(message, data, callback, begin, i);
-        } else if ((message.parser.sliced + diff) === message.parser.length) {
+        } else {
           [begin, i] = this._parsePartial(message, data, callback, begin, i);
         }
       }
@@ -51,25 +48,31 @@ export default class ChunkedDecoder extends Worker {
   }
 
   _parseLength(message, data, callback, begin, i) {
-    message.parser.length = parseInt(data.slice(begin, i - 1), 16);
+    message.parser.length = parseInt(data.slice(begin, i), 16);
     message.parser.sliced = 0;
 
-    begin = i + 1;
-    i = begin + message.parser.length;
+    if (Number.isNaN(message.parser.length)) {
+      throw new Error('Chunked data is corrupt');
+    }
+
+    begin = i + 2;
+    i = begin - 2 + message.parser.length;
 
     return [begin, i];
   }
 
   _parsePartial(message, data, callback, begin, i) {
-    this.pass(message, data.slice(begin, i - 1), callback);
+    if (message.parser.length !== 0) {
+      this.pass(message, data.slice(begin, i), callback);
+    }
 
     message.state.body = message.parser.length === 0;
 
     message.parser.length = null;
     message.parser.sliced = (message.parser.sliced || 0) +
-      data.slice(begin, i - 1).length;
+      data.slice(begin, i).length;
 
-    begin = i + 1;
+    begin = i + 2;
 
     return [begin, i];
   }
