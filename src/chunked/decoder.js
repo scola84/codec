@@ -19,7 +19,7 @@ export default class ChunkedDecoder extends Worker {
 
     for (; i < data.length; i += 1) {
       if (data[i] === 13) {
-        if (message.parser.length === null) {
+        if (message.state.body !== true && message.parser.length === null) {
           [begin, i] = this._parseLength(message, data, callback, begin, i);
         } else {
           [begin, i] = this._parsePartial(message, data, callback, begin, i);
@@ -41,6 +41,11 @@ export default class ChunkedDecoder extends Worker {
   }
 
   _parseComplete(message, data, callback, begin, i) {
+    if (i - begin === 1 && Number(data.slice(begin, i)) === 0) {
+      this._parseLength(message, data, callback, begin, i);
+      return;
+    }
+
     this.pass(message, data.slice(begin, i), callback);
 
     message.parser.sliced = (message.parser.sliced || 0) +
