@@ -1,6 +1,7 @@
 import setupClient from './src/helper/setup-client';
 import setupServer from './src/helper/setup-server';
 import chunked from './src/chunked';
+import csv from './src/csv';
 import formdata from './src/formdata';
 import html from './src/html';
 import json from './src/json';
@@ -22,8 +23,9 @@ export {
 
 export {
   chunked,
-  json,
+  csv,
   formdata,
+  json,
   html,
   msgpack,
   urlencoded
