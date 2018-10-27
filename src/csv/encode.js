@@ -1,5 +1,22 @@
-export default function encode({ delimiter = ',', fields = [] }, data) {
-  const regexp = new RegExp(`\n|"|${delimiter}`);
+const lineEndings = {
+  CR: '\r',
+  CRLF: '\r\n',
+  LF: '\n'
+};
+
+export default function encode(options = {}, data) {
+  const {
+    delimiter = ',',
+      fields = []
+  } = options;
+
+  let {
+    lineEnding = 'LF'
+  } = options;
+
+  lineEnding = lineEndings[lineEnding];
+
+  const regexp = new RegExp(`\r|\n|"|${delimiter}`);
 
   let csv = '';
   let field = null;
@@ -11,7 +28,7 @@ export default function encode({ delimiter = ',', fields = [] }, data) {
   }
 
   for (let i = 0; i < data.length; i += 1) {
-    csv += csv.length > 0 ? '\r\n' : '';
+    csv += csv.length > 0 ? lineEnding : '';
 
     for (let j = 0; j < fields.length; j += 1) {
       field = fields[j];

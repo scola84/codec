@@ -2,15 +2,31 @@ import { Buffer } from 'buffer/';
 
 const delimiters = [',', ';', '\t'];
 
-export default function decode({ delimiter = ',' }, data) {
+const lineEndings = {
+  CR: { length: 1, char: 13 },
+  CRLF: { length: 2, char: 13 },
+  LF: { length: 1, char: 10 }
+};
+
+export default function decode(options = {}, data) {
+  let {
+    delimiter = ',',
+      lineEnding = 'LF'
+  } = options;
+
+  data = Buffer.from(data.trim());
+
+  if (lineEnding === 'detect') {
+    lineEnding = detectLineEnding(data);
+  }
+
+  lineEnding = lineEndings[lineEnding];
+
   if (delimiter === 'detect') {
-    delimiter = detect(data) || delimiter;
+    delimiter = detectDelimiter(data, lineEnding);
   }
 
   delimiter = Buffer.from(delimiter)[0];
-  data = Buffer.from(data);
-
-  const lines = [];
 
   let begin = 0;
   let i = 0;
@@ -19,22 +35,24 @@ export default function decode({ delimiter = ',' }, data) {
   let isQuoted = false;
   let isValue = false;
 
+  const lines = [];
+
   for (; i < data.length; i += 1) {
     if (data[i] === 34) {
       isQuoted = true;
       isValue = isValue &&
-        (data[i + 1] === delimiter || data[i + 1] === 13) ?
+        (data[i + 1] === delimiter || data[i + 1] === lineEnding.char) ?
         false : true;
     } else if (data[i] === delimiter && isValue === false) {
       line[line.length] = safe(data, begin, i, isQuoted);
       isQuoted = false;
       begin = i + 1;
-    } else if (data[i] === 13 && isValue === false) {
+    } else if (data[i] === lineEnding.char && isValue === false) {
       line[line.length] = safe(data, begin, i, isQuoted);
       lines[lines.length] = line;
       line = [];
       isQuoted = false;
-      begin = i + 2;
+      begin = i + lineEnding.length;
     }
   }
 
@@ -44,11 +62,11 @@ export default function decode({ delimiter = ',' }, data) {
   return lines;
 }
 
-function detect(data) {
-  data = data.slice(0, data.indexOf('\n'));
+function detectDelimiter(data, lineEnding) {
+  data = String(data.slice(0, data.indexOf(lineEnding.char)));
 
   let count = 0;
-  let delimiter = null;
+  let delimiter = ',';
   let match = null;
 
   for (let i = 0; i < delimiters.length; i += 1) {
@@ -58,6 +76,22 @@ function detect(data) {
   }
 
   return delimiter;
+}
+
+function detectLineEnding(data) {
+  for (let i = 0; i < data.length; i += 1) {
+    if (data[i] === 13) {
+      if (data[i + 1] === 10) {
+        return 'CRLF';
+      }
+
+      return 'CR';
+    } else if (data[i] === 10) {
+      return 'LF';
+    }
+  }
+
+  return 'LF';
 }
 
 function safe(data, begin, i, isQuoted) {
