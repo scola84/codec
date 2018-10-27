@@ -9,9 +9,11 @@ export default class CsvEncoder extends Worker {
 
     this._delimiter = null;
     this._fields = null;
+    this._lineEnding = null;
 
     this.setDelimiter(options.delimiter);
     this.setFields(options.fields);
+    this.setLineEnding(options.lineEnding);
   }
 
   setDelimiter(value = ',') {
@@ -21,6 +23,11 @@ export default class CsvEncoder extends Worker {
 
   setFields(value = []) {
     this._fields = value;
+    return this;
+  }
+
+  setLineEnding(value = 'LF') {
+    this._lineEnding = value;
     return this;
   }
 
@@ -40,7 +47,8 @@ export default class CsvEncoder extends Worker {
   _encode(message, data, callback) {
     data = encode({
       delimiter: this._delimiter,
-      fields: this._fields
+      fields: this._fields,
+      lineEnding: this._lineEnding
     }, data);
 
     message.body.length = Buffer.byteLength(data);

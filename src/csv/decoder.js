@@ -6,11 +6,19 @@ export default class CsvDecoder extends Worker {
     super(options);
 
     this._delimiter = null;
+    this._lineEnding = null;
+
     this.setDelimiter(options.delimiter);
+    this.setLineEnding(options.lineEnding);
   }
 
   setDelimiter(value = ',') {
     this._delimiter = value;
+    return this;
+  }
+
+  setLineEnding(value = 'LF') {
+    this._lineEnding = value;
     return this;
   }
 
@@ -33,7 +41,8 @@ export default class CsvDecoder extends Worker {
 
   _decode(message, data, callback) {
     data = decode({
-      delimiter: this._delimiter
+      delimiter: this._delimiter,
+      lineEnding: this._lineEnding
     }, (message.parser.csv || '') + data);
 
     message.parser.csv = null;
