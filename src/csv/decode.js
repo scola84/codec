@@ -32,6 +32,7 @@ export default function decode(options = {}, data) {
   let i = 0;
   let line = [];
 
+  let isEscaped = false;
   let isQuoted = false;
   let isValue = false;
 
@@ -39,16 +40,14 @@ export default function decode(options = {}, data) {
 
   for (; i < data.length; i += 1) {
     if (data[i] === 34) {
-      isQuoted = true;
-      isValue = isValue &&
-        (data[i + 1] === delimiter || data[i + 1] === lineEnding.char) ?
-        false : true;
+      ([isQuoted, isValue, isEscaped, i] =
+        checkQuote(data, isValue, isEscaped, i));
     } else if (data[i] === delimiter && isValue === false) {
-      line[line.length] = safe(data, begin, i, isQuoted);
+      line[line.length] = parseValue(data, begin, i, isQuoted);
       isQuoted = false;
       begin = i + 1;
     } else if (data[i] === lineEnding.char && isValue === false) {
-      line[line.length] = safe(data, begin, i, isQuoted);
+      line[line.length] = parseValue(data, begin, i, isQuoted);
       lines[lines.length] = line;
       line = [];
       isQuoted = false;
@@ -56,10 +55,25 @@ export default function decode(options = {}, data) {
     }
   }
 
-  line[line.length] = safe(data, begin, i, isQuoted);
+  line[line.length] = parseValue(data, begin, i, isQuoted);
   lines[lines.length] = line;
 
   return lines;
+}
+
+function checkQuote(data, isValue, isEscaped, i) {
+  if (isValue === true) {
+    if (data[i + 1] === 34) {
+      isEscaped = !isEscaped;
+      i += 1;
+    } else if (isEscaped === false) {
+      isValue = false;
+    }
+  } else {
+    isValue = true;
+  }
+
+  return [true, isValue, isEscaped, i];
 }
 
 function detectDelimiter(data, lineEnding) {
@@ -94,7 +108,7 @@ function detectLineEnding(data) {
   return 'LF';
 }
 
-function safe(data, begin, i, isQuoted) {
+function parseValue(data, begin, i, isQuoted) {
   const quote = (isQuoted ? 1 : 0);
   const value = data.slice(begin + quote, i - quote);
   return String(value).replace(/""/g, '"');
