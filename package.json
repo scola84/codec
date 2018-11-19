@@ -12,7 +12,7 @@
     "buffer": "^5.2.1",
     "busboy": "^0.2.14",
     "file-api": "^0.10.4",
-    "fs-extra": "^7.0.0",
+    "fs-extra": "^7.0.1",
     "lodash-es": "^4.17.11",
     "msgpack-lite": "^0.1.26",
     "parse5": "^5.1.0",
