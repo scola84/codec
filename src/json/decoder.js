@@ -19,8 +19,12 @@ export default class JsonDecoder extends Worker {
   }
 
   _decode(message, data, callback) {
-    data = JSON.parse((message.parser.json || '') + data);
+    data = (message.parser.json || '') + data;
     message.parser.json = null;
+
+    if (data) {
+      data = JSON.parse(data);
+    }
 
     this.pass(message, data, callback);
   }

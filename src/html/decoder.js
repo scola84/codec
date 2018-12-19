@@ -20,9 +20,13 @@ export default class HtmlDecoder extends Worker {
   }
 
   _decode(message, data, callback) {
-    data = parser.parse((message.parser.html || '') + data);
-    data.toString = () => parser.serialize(data);
+    data = (message.parser.html || '') + data;
     message.parser.html = null;
+
+    if (data) {
+      data = parser.parse(data);
+      data.toString = () => parser.serialize(data);
+    }
 
     this.pass(message, data, callback);
   }

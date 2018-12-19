@@ -19,7 +19,7 @@ export default class PlainDecoder extends Worker {
   }
 
   _decode(message, data, callback) {
-    data = String((message.parser.plain || '') + data);
+    data = (message.parser.plain || '') + data;
     message.parser.plain = null;
 
     this.pass(message, data, callback);

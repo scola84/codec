@@ -20,8 +20,12 @@ export default class MsgPackDecoder extends Worker {
   }
 
   _decode(message, data, callback) {
-    data = decode((message.parser.msgpack || '') + data);
+    data = (message.parser.msgpack || '') + data;
     message.parser.msgpack = null;
+
+    if (data) {
+      data = decode(data);
+    }
 
     this.pass(message, data, callback);
   }
