@@ -26,6 +26,8 @@ export default class HtmlDecoder extends Worker {
     if (data) {
       data = parser.parse(data);
       data.toString = () => parser.serialize(data);
+    } else {
+      data = {};
     }
 
     this.pass(message, data, callback);

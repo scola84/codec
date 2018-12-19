@@ -25,6 +25,8 @@ export default class MsgPackDecoder extends Worker {
 
     if (data) {
       data = decode(data);
+    } else {
+      data = {};
     }
 
     this.pass(message, data, callback);

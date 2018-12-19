@@ -25,6 +25,8 @@ export default class UrlencodedDecoder extends Worker {
 
     if (data) {
       data = qs.parse(data);
+    } else {
+      data = {};
     }
 
     this.pass(message, data, callback);

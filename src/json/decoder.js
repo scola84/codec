@@ -24,6 +24,8 @@ export default class JsonDecoder extends Worker {
 
     if (data) {
       data = JSON.parse(data);
+    } else {
+      data = {};
     }
 
     this.pass(message, data, callback);
