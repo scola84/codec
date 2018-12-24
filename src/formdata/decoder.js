@@ -15,10 +15,11 @@ export default class FormDataDecoder extends Worker {
 
   setConfig(value = {}) {
     this._config = defaults({}, value, {
-      basePath: '/tmp/'
+      base: '/tmp/',
+      path: ''
     });
 
-    ensureDirSync(this._config.basePath);
+    ensureDirSync(this._config.base + '/' + this._config.path);
     return this;
   }
 
@@ -75,7 +76,9 @@ export default class FormDataDecoder extends Worker {
       file.name = name;
       file.type = type;
       file.size = 0;
-      file.tmppath = this._config.basePath + shortid.generate();
+
+      file.tmppath = this._config.base + '/' + this._config.path +
+        shortid.generate();
 
       const target = createWriteStream(file.tmppath);
 
