@@ -6,20 +6,17 @@ import msgpack from '../msgpack';
 import urlencoded from '../urlencoded';
 import plain from '../urlencoded';
 
-export default function setupServer([connector, ...workers], config = {}) {
-  connector
+export default function setupServer(workers, config = {}) {
+  const [
+    serverConnector, ,
+    errorResponder
+  ] = workers;
+
+  serverConnector
     .find((w) => w.constructor.name === 'TransferEncodingDecoder')
     .manage(chunked.encoding, new chunked.Decoder());
 
-  connector
-    .find((w) => w.constructor.name === 'TransferEncodingEncoder')
-    .manage(chunked.encoding, new chunked.Encoder());
-
-  connector
-    .find((w) => w.constructor.name === 'TransferEncodingHeader')
-    .addEncoding(chunked.encoding);
-
-  connector
+  serverConnector
     .find((w) => w.constructor.name === 'ContentTypeDecoder')
     .setStrict(false)
     .manage(html.type, new html.Decoder(config.html))
@@ -29,7 +26,15 @@ export default function setupServer([connector, ...workers], config = {}) {
     .manage(urlencoded.type, new urlencoded.Decoder(config.urlencoded))
     .manage(plain.type, new plain.Decoder(config.plain));
 
-  connector
+  errorResponder
+    .find((w) => w.constructor.name === 'TransferEncodingEncoder')
+    .manage(chunked.encoding, new chunked.Encoder());
+
+  errorResponder
+    .find((w) => w.constructor.name === 'TransferEncodingHeader')
+    .addEncoding(chunked.encoding);
+
+  errorResponder
     .find((w) => w.constructor.name === 'ContentTypeEncoder')
     .setStrict(false)
     .manage(html.type, new html.Encoder(config.html))
@@ -39,7 +44,7 @@ export default function setupServer([connector, ...workers], config = {}) {
     .manage(urlencoded.type, new urlencoded.Encoder(config.urlencoded))
     .manage(plain.type, new plain.Encoder(config.plain));
 
-  connector
+  errorResponder
     .find((w) => w.constructor.name === 'ContentTypeHeader')
     .addType(json.type)
     .addType(msgpack.type)
@@ -47,5 +52,5 @@ export default function setupServer([connector, ...workers], config = {}) {
     .addType(urlencoded.type)
     .addType(plain.type);
 
-  return [connector, ...workers];
+  return workers;
 }
