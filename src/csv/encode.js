@@ -7,7 +7,8 @@ const lineEndings = {
 export default function encode(options = {}, data) {
   const {
     delimiter = ',',
-      fields = []
+      fields = [],
+      quote = false
   } = options;
 
   let {
@@ -24,7 +25,7 @@ export default function encode(options = {}, data) {
   for (let i = 0; i < fields.length; i += 1) {
     field = fields[i];
     csv += field.label && i > 0 ? delimiter : '';
-    csv += field.label ? formatValue(field.label, delimiter, regexp) : '';
+    csv += field.label ? formatValue(field.label, delimiter, regexp, quote) : '';
   }
 
   for (let i = 0; i < data.length; i += 1) {
@@ -33,14 +34,16 @@ export default function encode(options = {}, data) {
     for (let j = 0; j < fields.length; j += 1) {
       field = fields[j];
       csv += j > 0 ? delimiter : '';
-      csv += formatValue(field.value(data[i]), delimiter, regexp);
+      csv += formatValue(field.value(data[i]), delimiter, regexp, quote);
     }
   }
 
   return csv;
 }
 
-function formatValue(value, delimiter, regexp) {
+function formatValue(value, delimiter, regexp, quote) {
   value = String(value);
-  return value.match(regexp) ? `"${value.replace(/"/g, '""')}"` : value;
+
+  return quote || value.match(regexp) ?
+    `"${value.replace(/"/g, '""')}"` : value;
 }
