@@ -23,13 +23,11 @@ export default class HtmlDecoder extends Worker {
     data = (message.parser.html || '') + data;
     message.parser.html = null;
 
-    if (data) {
-      data = parser.parse(data);
-      data.toString = () => parser.serialize(data);
-    } else {
-      data = {};
-    }
+    const dom = {
+      parse: () => parser.parse(data),
+      toString: () => data
+    };
 
-    this.pass(message, data, callback);
+    this.pass(message, dom, callback);
   }
 }
