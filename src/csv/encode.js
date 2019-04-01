@@ -34,7 +34,7 @@ export default function encode(options = {}, data) {
     for (let j = 0; j < fields.length; j += 1) {
       field = fields[j];
       csv += j > 0 ? delimiter : '';
-      csv += formatValue(field.value(data[i][j]), delimiter, regexp, quote);
+      csv += formatValue(field.value(data[i], j), delimiter, regexp, quote);
     }
   }
 
