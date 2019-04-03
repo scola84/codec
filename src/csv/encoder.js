@@ -1,6 +1,6 @@
 import { Worker } from '@scola/worker';
 import { Buffer } from 'buffer/';
-import encode from './encode';
+import CsvStruct from './struct';
 import type from './type';
 
 export default class CsvEncoder extends Worker {
@@ -45,11 +45,13 @@ export default class CsvEncoder extends Worker {
   }
 
   _encode(message, data, callback) {
-    data = encode({
+    const struct = new CsvStruct({
       delimiter: this._delimiter,
       fields: this._fields,
       lineEnding: this._lineEnding
     }, data);
+
+    data = struct.encode();
 
     message.body.length = Buffer.byteLength(data);
     message.state.body = true;

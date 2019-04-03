@@ -1,5 +1,5 @@
 import { Worker } from '@scola/worker';
-import decode from './decode';
+import CsvStruct from './struct';
 
 export default class CsvDecoder extends Worker {
   constructor(options = {}) {
@@ -40,10 +40,12 @@ export default class CsvDecoder extends Worker {
   }
 
   _decode(message, data, callback) {
-    data = decode({
+    const struct = new CsvStruct({
       delimiter: this._delimiter,
       lineEnding: this._lineEnding
     }, (message.parser.csv || '') + data);
+
+    data = struct.decode();
 
     message.parser.csv = null;
 
