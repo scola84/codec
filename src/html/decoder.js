@@ -1,5 +1,5 @@
 import { Worker } from '@scola/worker';
-import parser from 'parse5';
+import HtmlStruct from './struct';
 
 export default class HtmlDecoder extends Worker {
   act(message, data, callback) {
@@ -23,11 +23,8 @@ export default class HtmlDecoder extends Worker {
     data = (message.parser.html || '') + data;
     message.parser.html = null;
 
-    const dom = {
-      parse: () => parser.parse(data),
-      toString: () => data
-    };
+    const struct = new HtmlStruct(data);
 
-    this.pass(message, dom, callback);
+    this.pass(message, struct, callback);
   }
 }
