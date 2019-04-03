@@ -132,7 +132,7 @@ export default class CsvStruct {
         lines[lines.length] = line;
         line = [];
         isQuoted = false;
-        begin = i + (lineEnding.char.length / 2);
+        begin = i + lineEnding.char.length;
       }
     }
 
