@@ -163,15 +163,14 @@ export default class CsvStruct {
     for (let i = 0; i < fields.length; i += 1) {
       field = fields[i];
 
-      csv += field.label && i > 0 ?
-        delimiter : '';
+      csv += i > 0 ? delimiter : '';
 
-      csv += field.label ? CsvStruct.formatValue(
+      csv += CsvStruct.formatValue(
         field.label,
         delimiter,
         regexp,
         quote
-      ) : '';
+      );
     }
 
     for (let i = 0; i < this._data.length; i += 1) {
