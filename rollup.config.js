@@ -22,7 +22,6 @@ export default {
     extend: true,
     file: 'dist/codec.umd.js',
     format: 'umd',
-    indent: false,
     name: 'scola'
   }],
   plugins: [
