@@ -1,25 +1,27 @@
-import chunked from '../chunked';
-import formdata from '../formdata';
-import html from '../html';
-import json from '../json';
-import msgpack from '../msgpack';
-import urlencoded from '../urlencoded';
-import plain from '../plain';
+import {
+  chunked,
+  formdata,
+  html,
+  json,
+  msgpack,
+  urlencoded,
+  plain
+} from '../worker';
 
 export default function setupClient(workers, config = {}) {
-  const [
-    clientConnector
-  ] = workers;
+  const {
+    connector
+  } = workers;
 
-  clientConnector
+  connector
     .find((w) => w.constructor.name === 'TransferEncodingDecoder')
     .manage(chunked.encoding, new chunked.Decoder());
 
-  clientConnector
+  connector
     .find((w) => w.constructor.name === 'TransferEncodingEncoder')
     .manage(chunked.encoding, new chunked.Encoder());
 
-  clientConnector
+  connector
     .find((w) => w.constructor.name === 'ContentTypeDecoder')
     .setStrict(false)
     .manage(html.type, new html.Decoder(config.html))
@@ -29,7 +31,7 @@ export default function setupClient(workers, config = {}) {
     .manage(urlencoded.type, new urlencoded.Decoder(config.urlencoded))
     .manage(plain.type, new plain.Decoder(config.plain));
 
-  clientConnector
+  connector
     .find((w) => w.constructor.name === 'ContentTypeEncoder')
     .setStrict(false)
     .manage(html.type, new html.Encoder(config.html))
