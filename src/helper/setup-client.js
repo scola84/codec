@@ -27,7 +27,6 @@ export default function setupClient(workers, config = {}) {
     .manage(html.type, new html.Decoder(config.html))
     .manage(json.type, new json.Decoder(config.json))
     .manage(msgpack.type, new msgpack.Decoder(config.msgpack))
-    .manage(formdata.type, new formdata.Decoder(config.formdata))
     .manage(urlencoded.type, new urlencoded.Decoder(config.urlencoded))
     .manage(plain.type, new plain.Decoder(config.plain));
 

@@ -1,18 +1,19 @@
 {
   "name": "@scola/codec",
   "version": "3.0.0",
-  "description": "Codecs",
+  "description": "Encode and decode documents",
   "repository": "github:scola84/codec",
   "author": "M.C. van den Boogaart <scola@kvdb.name>",
   "license": "MIT",
   "main": "./dist/codec.cjs.js",
   "module": "./index.js",
   "devDependencies": {
-    "rollup": "^1.12.3",
+    "rollup": "^1.13.1",
     "rollup-plugin-buble": "^0.19.6",
     "rollup-plugin-commonjs": "^10.0.0",
     "rollup-plugin-json": "^4.0.0",
-    "rollup-plugin-node-resolve": "^5.0.0"
+    "rollup-plugin-node-builtins": "^2.1.2",
+    "rollup-plugin-node-resolve": "^5.0.1"
   },
   "dependencies": {
     "@scola/worker": "^2.15.0",
