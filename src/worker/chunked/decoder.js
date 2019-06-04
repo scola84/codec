@@ -8,6 +8,10 @@ export default class ChunkedDecoder extends Worker {
     this.setMaxLength(options.maxLength);
   }
 
+  getMaxLength() {
+    return this._maxLength;
+  }
+
   setMaxLength(maxLength = 1024 * 1024) {
     this._maxLength = maxLength;
     return this;
@@ -20,15 +24,15 @@ export default class ChunkedDecoder extends Worker {
     for (; i < data.length; i += 1) {
       if (data[i] === 13) {
         if (message.state.body !== true && message.parser.length === null) {
-          [begin, i] = this._parseLength(message, data, callback, begin, i);
+          [begin, i] = this.parseLength(message, data, callback, begin, i);
         } else {
-          [begin, i] = this._parsePartial(message, data, callback, begin, i);
+          [begin, i] = this.parsePartial(message, data, callback, begin, i);
         }
       }
     }
 
     if (begin < i || message.parser.length === null) {
-      this._parseComplete(message, data, callback, begin, i);
+      this.parseComplete(message, data, callback, begin, i);
     }
 
     message.parser.begin = 0;
@@ -40,9 +44,9 @@ export default class ChunkedDecoder extends Worker {
       message.state.headers === true;
   }
 
-  _parseComplete(message, data, callback, begin, i) {
+  parseComplete(message, data, callback, begin, i) {
     if (i - begin === 1 && Number(data.slice(begin, i)) === 0) {
-      this._parseLength(message, data, callback, begin, i);
+      this.parseLength(message, data, callback, begin, i);
       return;
     }
 
@@ -52,7 +56,7 @@ export default class ChunkedDecoder extends Worker {
       data.slice(begin, i).length;
   }
 
-  _parseLength(message, data, callback, begin, i) {
+  parseLength(message, data, callback, begin, i) {
     message.parser.length = parseInt(data.slice(begin, i), 16);
     message.parser.sliced = 0;
 
@@ -66,7 +70,7 @@ export default class ChunkedDecoder extends Worker {
     return [begin, i];
   }
 
-  _parsePartial(message, data, callback, begin, i) {
+  parsePartial(message, data, callback, begin, i) {
     if (message.parser.length !== 0) {
       this.pass(message, data.slice(begin, i), callback);
     }

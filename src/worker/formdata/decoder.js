@@ -24,15 +24,15 @@ export default class FormDataDecoder extends Worker {
 
   act(message, data, callback) {
     try {
-      this._decode(message, data, callback);
+      this.decode(message, data, callback);
     } catch (error) {
       throw new Error('400 ' + error.message);
     }
   }
 
-  _decode(message, data, callback) {
+  decode(message, data, callback) {
     if (typeof message.parser.formdata === 'undefined') {
-      this._setup(message, data, callback);
+      this.setup(message, data, callback);
     }
 
     if (message.state.body === true) {
@@ -42,7 +42,7 @@ export default class FormDataDecoder extends Worker {
     }
   }
 
-  _set(data, name, value) {
+  set(data, name, value) {
     if (typeof data[name] !== 'undefined') {
       if (Array.isArray(data[name]) === true) {
         value = data[name].concat(value);
@@ -54,7 +54,7 @@ export default class FormDataDecoder extends Worker {
     data[name] = value;
   }
 
-  _setup(message, data, callback) {
+  setup(message, data, callback) {
     const options = Object.assign({
       headers: {
         'content-type': (message._original || message)
@@ -66,7 +66,7 @@ export default class FormDataDecoder extends Worker {
     const parsed = {};
 
     formdata.on('field', (name, value) => {
-      this._set(parsed, name, value);
+      this.set(parsed, name, value);
     });
 
     formdata.on('file', (fieldName, stream, name, encoding, type) => {
@@ -86,16 +86,16 @@ export default class FormDataDecoder extends Worker {
       });
 
       stream.on('limit', () => {
-        this._set(parsed, fieldName,
+        this.set(parsed, fieldName,
           new Error('400 File size exceeds maximum'));
       });
 
       stream.once('end', () => {
-        this._set(parsed, fieldName, file);
+        this.set(parsed, fieldName, file);
       });
 
       stream.once('error', (error) => {
-        this._set(parsed, fieldName, error);
+        this.set(parsed, fieldName, error);
       });
 
       stream.pipe(target);

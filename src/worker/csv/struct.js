@@ -74,22 +74,10 @@ export default class CsvStruct {
   }
 
   decode() {
-    if (typeof this._data === 'string') {
-      this._data = this._decode();
-    }
-
-    return this._data;
-  }
-
-  encode() {
     if (typeof this._data !== 'string') {
-      this._data = this._encode();
+      return this._data;
     }
 
-    return this._data;
-  }
-
-  _decode() {
     let {
       delimiter = ',',
         lineEnding = 'LF'
@@ -139,10 +127,15 @@ export default class CsvStruct {
     line[line.length] = CsvStruct.parseValue(data, begin, i, isQuoted);
     lines[lines.length] = line;
 
-    return lines;
+    this._data = lines;
+    return this._data;
   }
 
-  _encode() {
+  encode() {
+    if (typeof this._data === 'string') {
+      return this._data;
+    }
+
     const {
       delimiter = ',',
         fields = [],
@@ -191,7 +184,8 @@ export default class CsvStruct {
       }
     }
 
-    return csv;
+    this._data = csv;
+    return this._data;
   }
 
   toString() {

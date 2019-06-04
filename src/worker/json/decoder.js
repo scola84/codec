@@ -8,7 +8,7 @@ export default class JsonDecoder extends Worker {
     }
 
     try {
-      this._decode(message, data, callback);
+      this.decode(message, data, callback);
     } catch (error) {
       throw new Error('400 ' + error.message);
     }
@@ -18,7 +18,7 @@ export default class JsonDecoder extends Worker {
     return data === null ? null : true;
   }
 
-  _decode(message, data, callback) {
+  decode(message, data, callback) {
     data = (message.parser.json || '') + data;
     message.parser.json = null;
 

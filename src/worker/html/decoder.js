@@ -9,7 +9,7 @@ export default class HtmlDecoder extends Worker {
     }
 
     try {
-      this._decode(message, data, callback);
+      this.decode(message, data, callback);
     } catch (error) {
       throw new Error('400 ' + error.message);
     }
@@ -19,7 +19,7 @@ export default class HtmlDecoder extends Worker {
     return data === null ? null : true;
   }
 
-  _decode(message, data, callback) {
+  decode(message, data, callback) {
     data = (message.parser.html || '') + data;
     message.parser.html = null;
 

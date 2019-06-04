@@ -12,9 +12,17 @@ export default class CsvDecoder extends Worker {
     this.setLineEnding(options.lineEnding);
   }
 
+  getDelimiter() {
+    return this._delimiter;
+  }
+
   setDelimiter(value = ',') {
     this._delimiter = value;
     return this;
+  }
+
+  getLineEnding() {
+    return this._lineEnding;
   }
 
   setLineEnding(value = 'LF') {
@@ -29,7 +37,7 @@ export default class CsvDecoder extends Worker {
     }
 
     try {
-      this._decode(message, data, callback);
+      this.decode(message, data, callback);
     } catch (error) {
       throw new Error('400 ' + error.message);
     }
@@ -39,7 +47,7 @@ export default class CsvDecoder extends Worker {
     return data === null ? null : true;
   }
 
-  _decode(message, data, callback) {
+  decode(message, data, callback) {
     const struct = new CsvStruct({
       delimiter: this._delimiter,
       lineEnding: this._lineEnding

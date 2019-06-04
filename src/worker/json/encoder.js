@@ -5,7 +5,7 @@ import type from './type';
 export default class JsonEncoder extends Worker {
   act(message, data, callback) {
     try {
-      this._encode(message, data, callback);
+      this.encode(message, data, callback);
     } catch (error) {
       throw new Error('500 ' + error.message);
     }
@@ -16,7 +16,7 @@ export default class JsonEncoder extends Worker {
       message.body.dataType !== type;
   }
 
-  _encode(message, data, callback) {
+  encode(message, data, callback) {
     data = JSON.stringify(data);
 
     message.body.length = Buffer.byteLength(data);

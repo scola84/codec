@@ -10,6 +10,10 @@ export default class ChunkedEncoder extends Worker {
     this.setChunkLength(options.chunkLength);
   }
 
+  getChunkLength() {
+    return this._chunkLength;
+  }
+
   setChunkLength(chunkLength = 64 * 1024) {
     this._chunkLength = chunkLength;
     return this;
@@ -17,9 +21,9 @@ export default class ChunkedEncoder extends Worker {
 
   act(message, data, callback) {
     if (data === null) {
-      this._flush(message, data, callback);
+      this.flush(message, data, callback);
     } else {
-      this._encode(message, data, callback);
+      this.encode(message, data, callback);
     }
   }
 
@@ -27,7 +31,7 @@ export default class ChunkedEncoder extends Worker {
     return message.state.body !== true;
   }
 
-  _encode(message, data, callback) {
+  encode(message, data, callback) {
     let buffer = null;
     let i = 0;
     let newLength = 0;
@@ -47,7 +51,7 @@ export default class ChunkedEncoder extends Worker {
     }
   }
 
-  _flush(message, data, callback) {
+  flush(message, data, callback) {
     message.state.body = true;
 
     this.pass(message, Buffer.concat([

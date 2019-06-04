@@ -6,7 +6,7 @@ import type from './type';
 export default class UrlencodedEncoder extends Worker {
   act(message, data, callback) {
     try {
-      this._encode(message, data, callback);
+      this.encode(message, data, callback);
     } catch (error) {
       throw new Error('500 ' + error.message);
     }
@@ -17,7 +17,7 @@ export default class UrlencodedEncoder extends Worker {
       message.body.dataType !== type;
   }
 
-  _encode(message, data, callback) {
+  encode(message, data, callback) {
     data = qs.stringify(data);
 
     message.body.length = Buffer.byteLength(data);
