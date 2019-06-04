@@ -19,7 +19,6 @@
     "@scola/worker": "^2.15.0",
     "buffer": "^5.2.1",
     "busboy": "^0.3.1",
-    "file-api": "^0.10.4",
     "fs-extra": "^8.0.1",
     "lodash-es": "^4.17.11",
     "msgpack-lite": "^0.1.26",

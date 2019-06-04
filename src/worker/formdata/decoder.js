@@ -1,7 +1,6 @@
 import { Worker } from '@scola/worker';
 import Busboy from 'busboy';
-import { createWriteStream } from 'fs';
-import { ensureDirSync } from 'fs-extra';
+import fs from 'fs-extra';
 import defaults from 'lodash-es/defaults';
 import shortid from 'shortid';
 
@@ -19,7 +18,7 @@ export default class FormDataDecoder extends Worker {
       path: ''
     });
 
-    ensureDirSync(this._config.base + '/' + this._config.path);
+    fs.ensureDirSync(this._config.base + '/' + this._config.path);
     return this;
   }
 
@@ -44,12 +43,12 @@ export default class FormDataDecoder extends Worker {
   }
 
   _set(data, name, value) {
-    const isArray = name.slice(-2) === '[]';
-    name = isArray ? name.slice(0, -2) : name;
-
-    if (isArray) {
-      value = typeof data[name] === 'undefined' ?
-        ([value]) : data[name].concat(value);
+    if (typeof data[name] !== 'undefined') {
+      if (Array.isArray(data[name]) === true) {
+        value = data[name].concat(value);
+      } else {
+        value = [data[name], value];
+      }
     }
 
     data[name] = value;
@@ -80,7 +79,7 @@ export default class FormDataDecoder extends Worker {
       file.tmppath = this._config.base + '/' + this._config.path +
         shortid.generate();
 
-      const target = createWriteStream(file.tmppath);
+      const target = fs.createWriteStream(file.tmppath);
 
       stream.on('data', (chunk) => {
         file.size += chunk.length;

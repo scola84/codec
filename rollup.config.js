@@ -8,8 +8,6 @@ export default {
   input: './index.js',
   external: [
     'busboy',
-    'file-api',
-    'fs',
     'fs-extra',
     'msgpack-lite',
     'parse5',
