@@ -146,27 +146,27 @@ export default class CsvStruct {
     const {
       delimiter = ',',
         fields = [],
+        labels = false,
         quote = false
     } = this._options;
 
     let {
-      lineEnding = 'LF'
+      csv = '',
+        lineEnding = 'LF'
     } = this._options;
 
     lineEnding = lineEndings[lineEnding];
 
     const regexp = new RegExp(`\r|\n|"|${delimiter}`);
 
-    let csv = '';
-    let field = null;
-
     for (let i = 0; i < fields.length; i += 1) {
-      field = fields[i];
+      if (labels === false) {
+        break;
+      }
 
       csv += i > 0 ? delimiter : '';
-
       csv += CsvStruct.formatValue(
-        field.label,
+        fields[i].label,
         delimiter,
         regexp,
         quote
@@ -177,13 +177,9 @@ export default class CsvStruct {
       csv += csv.length > 0 ? lineEnding.char : '';
 
       for (let j = 0; j < fields.length; j += 1) {
-        field = fields[j];
-
-        csv += j > 0 ?
-          delimiter : '';
-
+        csv += j > 0 ? delimiter : '';
         csv += CsvStruct.formatValue(
-          field.value(this._data[i], j),
+          fields[j].value(this._data[i], j),
           delimiter,
           regexp,
           quote
