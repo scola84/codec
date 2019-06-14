@@ -11,7 +11,7 @@ import {
 export default function setupServer(workers, config = {}) {
   const {
     connector,
-    responder
+    resolver
   } = workers;
 
   connector
@@ -28,15 +28,15 @@ export default function setupServer(workers, config = {}) {
     .manage(urlencoded.type, new urlencoded.Decoder(config.urlencoded))
     .manage(plain.type, new plain.Decoder(config.plain));
 
-  responder
+  resolver
     .find((w) => w.constructor.name === 'TransferEncodingEncoder')
     .manage(chunked.encoding, new chunked.Encoder());
 
-  responder
+  resolver
     .find((w) => w.constructor.name === 'TransferEncodingHeader')
     .addEncoding(chunked.encoding);
 
-  responder
+  resolver
     .find((w) => w.constructor.name === 'ContentTypeEncoder')
     .setStrict(false)
     .manage(html.type, new html.Encoder(config.html))
@@ -46,7 +46,7 @@ export default function setupServer(workers, config = {}) {
     .manage(urlencoded.type, new urlencoded.Encoder(config.urlencoded))
     .manage(plain.type, new plain.Encoder(config.plain));
 
-  responder
+  resolver
     .find((w) => w.constructor.name === 'ContentTypeHeader')
     .addType(json.type)
     .addType(msgpack.type)

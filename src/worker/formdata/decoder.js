@@ -57,8 +57,9 @@ export default class FormDataDecoder extends Worker {
   setup(message, data, callback) {
     const options = Object.assign({
       headers: {
-        'content-type': (message._original || message)
-          .getHeader('Content-Type')
+        'content-type': (
+          message._original || message
+        ).headers['content-type']
       }
     }, this._config);
 
