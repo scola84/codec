@@ -36,10 +36,26 @@ export default class FormDataDecoder extends Worker {
     }
 
     if (message.state.body === true) {
-      message.parser.formdata.end(data);
+      message.parser.formdata.end(data, null, callback);
     } else {
-      message.parser.formdata.write(data);
+      message.parser.formdata.write(data, null, callback);
     }
+  }
+
+  handleError(message, error, callback) {
+    message.parser.formdata.removeAllListeners();
+    message.parser.formdata = null;
+
+    error = new Error('400 ' + error.message);
+
+    this.fail(message, error, callback);
+  }
+
+  handleFinish(message, data, callback) {
+    message.parser.formdata.removeAllListeners();
+    message.parser.formdata = null;
+
+    this.pass(message, data, callback);
   }
 
   set(data, name, value) {
@@ -55,13 +71,9 @@ export default class FormDataDecoder extends Worker {
   }
 
   setup(message, data, callback) {
-    const options = Object.assign({
-      headers: {
-        'content-type': (
-          message._original || message
-        ).headers['content-type']
-      }
-    }, this._config);
+    const options = Object.assign({}, this._config, {
+      headers: (message._original || message).headers
+    });
 
     const formdata = new Busboy(options);
     const parsed = {};
@@ -86,9 +98,9 @@ export default class FormDataDecoder extends Worker {
         file.size += chunk.length;
       });
 
-      stream.on('limit', () => {
-        this.set(parsed, fieldName,
-          new Error('400 File size exceeds maximum'));
+      stream.once('limit', () => {
+        const error = new Error('File size exceeds maximum');
+        this.handleError(message, error, callback);
       });
 
       stream.once('end', () => {
@@ -99,21 +111,19 @@ export default class FormDataDecoder extends Worker {
         this.set(parsed, fieldName, error);
       });
 
+      target.on('drain', () => {
+        callback(message, true);
+      });
+
       stream.pipe(target);
     });
 
     formdata.once('error', (error) => {
-      formdata.removeAllListeners();
-      message.parser.formdata = null;
-
-      this.fail(message, new Error('400 ' + error.message), callback);
+      this.handleError(message, error, callback);
     });
 
     formdata.once('finish', () => {
-      formdata.removeAllListeners();
-      message.parser.formdata = null;
-
-      this.pass(message, parsed, callback);
+      this.handleFinish(message, parsed, callback);
     });
 
     message.parser.formdata = formdata;
