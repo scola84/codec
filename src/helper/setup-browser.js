@@ -1,2 +1,1 @@
-import setupClient from './setup-client';
-export default setupClient;
+export { default } from './setup-client';
