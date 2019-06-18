@@ -8,7 +8,7 @@ import {
   plain
 } from '../worker';
 
-export default function setupClient(workers, config = {}) {
+export function setupClient(workers, config = {}) {
   const {
     connector
   } = workers;

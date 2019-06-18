@@ -1,7 +1,7 @@
 import { Worker } from '@scola/worker';
 import { decode } from 'msgpack-lite';
 
-export default class MsgPackDecoder extends Worker {
+export class Decoder extends Worker {
   act(message, data, callback) {
     if (message.state.body !== true) {
       message.parser.msgpack = (message.parser.msgpack || '') + data;

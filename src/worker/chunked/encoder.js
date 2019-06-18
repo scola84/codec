@@ -2,7 +2,7 @@ import { Worker } from '@scola/worker';
 import { Buffer } from 'buffer/';
 const CRLF = Buffer.from('\r\n');
 
-export default class ChunkedEncoder extends Worker {
+export class Encoder extends Worker {
   constructor(options = {}) {
     super(options);
 

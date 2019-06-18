@@ -1,1 +1,1 @@
-export default 'application/msgpack';
+export const type = 'application/msgpack';

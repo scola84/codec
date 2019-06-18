@@ -1,1 +1,1 @@
-export default 'text/csv';
+export const type = 'text/csv';

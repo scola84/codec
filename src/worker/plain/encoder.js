@@ -1,8 +1,8 @@
 import { Worker } from '@scola/worker';
 import { Buffer } from 'buffer/';
-import type from './type';
+import { type } from './type';
 
-export default class PlainEncoder extends Worker {
+export class Encoder extends Worker {
   act(message, data, callback) {
     try {
       this.encode(message, data, callback);

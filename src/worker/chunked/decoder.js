@@ -1,6 +1,6 @@
 import { Worker } from '@scola/worker';
 
-export default class ChunkedDecoder extends Worker {
+export class Decoder extends Worker {
   constructor(options = {}) {
     super(options);
 

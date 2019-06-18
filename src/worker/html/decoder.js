@@ -1,7 +1,7 @@
 import { Worker } from '@scola/worker';
-import HtmlStruct from './struct';
+import { Struct } from './struct';
 
-export default class HtmlDecoder extends Worker {
+export class Decoder extends Worker {
   act(message, data, callback) {
     if (message.state.body !== true) {
       message.parser.html = (message.parser.html || '') + data;
@@ -23,7 +23,7 @@ export default class HtmlDecoder extends Worker {
     data = (message.parser.html || '') + data;
     message.parser.html = null;
 
-    const struct = new HtmlStruct(data);
+    const struct = new Struct(data);
 
     this.pass(message, struct, callback);
   }

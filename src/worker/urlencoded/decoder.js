@@ -1,7 +1,7 @@
 import { Worker } from '@scola/worker';
 import qs from 'qs';
 
-export default class UrlencodedDecoder extends Worker {
+export class Decoder extends Worker {
   act(message, data, callback) {
     if (message.state.body !== true) {
       message.parser.urlencoded = (message.parser.urlencoded || '') + data;

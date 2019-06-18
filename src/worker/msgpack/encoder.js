@@ -1,9 +1,9 @@
 import { Worker } from '@scola/worker';
 import { Buffer } from 'buffer/';
 import { encode } from 'msgpack-lite';
-import type from './type';
+import { type } from './type';
 
-export default class MsgpackEncoder extends Worker {
+export class Encoder extends Worker {
   act(message, data, callback) {
     try {
       this.encode(message, data, callback);

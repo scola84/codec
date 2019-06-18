@@ -1,1 +1,1 @@
-export { default } from './setup-client';
+export { setupClient as setupBrowser } from './setup-client';

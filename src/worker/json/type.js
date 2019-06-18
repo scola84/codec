@@ -1,1 +1,1 @@
-export default 'application/json';
+export const type = 'application/json';

@@ -1,1 +1,1 @@
-export default 'multipart/form-data';
+export const type = 'multipart/form-data';

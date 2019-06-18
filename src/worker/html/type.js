@@ -1,1 +1,1 @@
-export default 'text/html';
+export const type = 'text/html';

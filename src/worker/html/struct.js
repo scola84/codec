@@ -1,6 +1,6 @@
 import parser from 'parse5';
 
-export default class HtmlStruct {
+export class Struct {
   constructor(data) {
     this._data = data;
   }

@@ -8,7 +8,7 @@ const lineEndings = {
   LF: { char: '\n', code: 10 }
 };
 
-export default class CsvStruct {
+export class Struct {
   static checkQuote(data, isValue, isEscaped, i) {
     if (isValue === true) {
       if (data[i + 1] === 34) {
@@ -86,13 +86,13 @@ export default class CsvStruct {
     const data = Buffer.from(this._data.trim());
 
     if (lineEnding === 'detect') {
-      lineEnding = CsvStruct.detectLineEnding(data);
+      lineEnding = Struct.detectLineEnding(data);
     }
 
     lineEnding = lineEndings[lineEnding];
 
     if (delimiter === 'detect') {
-      delimiter = CsvStruct.detectDelimiter(data, lineEnding.code);
+      delimiter = Struct.detectDelimiter(data, lineEnding.code);
     }
 
     delimiter = Buffer.from(delimiter)[0];
@@ -110,13 +110,13 @@ export default class CsvStruct {
     for (; i < data.length; i += 1) {
       if (data[i] === 34) {
         ([isQuoted, isValue, isEscaped, i] =
-          CsvStruct.checkQuote(data, isValue, isEscaped, i));
+          Struct.checkQuote(data, isValue, isEscaped, i));
       } else if (data[i] === delimiter && isValue === false) {
-        line[line.length] = CsvStruct.parseValue(data, begin, i, isQuoted);
+        line[line.length] = Struct.parseValue(data, begin, i, isQuoted);
         isQuoted = false;
         begin = i + 1;
       } else if (data[i] === lineEnding.code && isValue === false) {
-        line[line.length] = CsvStruct.parseValue(data, begin, i, isQuoted);
+        line[line.length] = Struct.parseValue(data, begin, i, isQuoted);
         lines[lines.length] = line;
         line = [];
         isQuoted = false;
@@ -124,7 +124,7 @@ export default class CsvStruct {
       }
     }
 
-    line[line.length] = CsvStruct.parseValue(data, begin, i, isQuoted);
+    line[line.length] = Struct.parseValue(data, begin, i, isQuoted);
     lines[lines.length] = line;
 
     this._data = lines;
@@ -158,7 +158,7 @@ export default class CsvStruct {
 
       csv += i > 0 ? delimiter : '';
 
-      csv += CsvStruct.formatValue(
+      csv += Struct.formatValue(
         field.label,
         delimiter,
         regexp,
@@ -175,7 +175,7 @@ export default class CsvStruct {
         csv += j > 0 ?
           delimiter : '';
 
-        csv += CsvStruct.formatValue(
+        csv += Struct.formatValue(
           field.value(this._data[i], j),
           delimiter,
           regexp,

@@ -1,1 +1,1 @@
-export default 'chunked';
+export const encoding = 'chunked';

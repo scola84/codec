@@ -1,6 +1,6 @@
 import { Worker } from '@scola/worker';
 
-export default class PlainDecoder extends Worker {
+export class Decoder extends Worker {
   act(message, data, callback) {
     if (message.state.body !== true) {
       message.parser.plain = (message.parser.plain || '') + data;

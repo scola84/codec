@@ -4,7 +4,7 @@ import fs from 'fs-extra';
 import defaults from 'lodash-es/defaults';
 import shortid from 'shortid';
 
-export default class FormDataDecoder extends Worker {
+export class Decoder extends Worker {
   constructor(options = {}) {
     super(options);
 

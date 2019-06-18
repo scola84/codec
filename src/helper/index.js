@@ -1,9 +1,3 @@
-import setupBrowser from './setup-browser';
-import setupClient from './setup-client';
-import setupServer from './setup-server';
-
-export {
-  setupBrowser,
-  setupClient,
-  setupServer
-};
+export * from './setup-browser';
+export * from './setup-client';
+export * from './setup-server';

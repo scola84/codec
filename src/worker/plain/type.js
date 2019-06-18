@@ -1,1 +1,1 @@
-export default 'text/plain';
+export const type = 'text/plain';

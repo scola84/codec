@@ -1,1 +1,1 @@
-export default 'application/x-www-form-urlencoded';
+export const type = 'application/x-www-form-urlencoded';
