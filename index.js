@@ -6,6 +6,7 @@ import formdata from './src/formdata';
 import html from './src/html';
 import json from './src/json';
 import msgpack from './src/msgpack';
+import octetStream from './src/octet-stream';
 import plain from './src/plain';
 import urlencoded from './src/urlencoded';
 
@@ -14,6 +15,7 @@ export const codec = [
   json,
   html,
   msgpack,
+  octetStream,
   urlencoded,
   plain
 ];
@@ -30,6 +32,7 @@ export {
   json,
   html,
   msgpack,
+  octetStream,
   urlencoded,
   plain
 };
